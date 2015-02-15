@@ -45,6 +45,10 @@ comment
 
 The line begins with "#" is a comment line
 
+
+
+
+
 method section
 ---------------
 
@@ -56,6 +60,23 @@ The line begins with a ``[`` and ends with ``]`` a test method section::
 	> POST /request fid=1233 access_token="Blabla"
 	code: 200
 	content <- OK
+
+
+intialize your test instance variables
+-----------------------------------------
+
+You can intialize or bind the variables use intialize method::
+
+	[intialize]
+
+	@key = "key"
+	@page = 2
+
+
+All key begins with "@" will build to testcase instance attributes, like @key is compiled to  "self.key",
+and intialize method  is called in SetUp method.
+
+
 
 http send command
 --------------------
