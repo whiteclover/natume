@@ -161,7 +161,7 @@ When set charset command:
 it will assert response charset.
 
 
-.. Note:: When uses ":" to test response info, if the assert key not (content, json, code, content_type, )
+.. Note:: When uses ":" to test response info, if the assert key not in (content, json, code, content_type, charset)， it will test the response head info.
 
 
 
