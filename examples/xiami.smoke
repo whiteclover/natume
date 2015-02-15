@@ -1,0 +1,36 @@
+[initialize]
+
+@key = "苏打绿"
+
+[index]
+> GET /
+
+content <- 虾米音乐网(xiami.com)
+
+
+[song api]
+> GET /song/playlist/id/1772167572/type/0/cat/json
+
+content_type: application/json
+charset: utf-8
+
+json: ['data']['trackList'][0]['title'] = u'再遇见'
+json: ['data']['trackList'][0]['song_id'] =  '1772167572'
+json: ['data']['type_id'] = 1
+
+[search]
+> GET /search/collect key='苏打绿'
+
+code: 200
+content <- 苏打绿歌曲: 最好听的苏打绿音乐试听
+content =~ /Xiami.com/i
+
+
+[search page 2]
+> GET /search/collect/page/2 key=@key order='weight'
+
+code: 200
+content <- 苏打绿歌曲: 最好听的苏打绿音乐试听
+content =~ /XiaMi.com/i
+
+
