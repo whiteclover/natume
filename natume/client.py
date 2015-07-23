@@ -88,7 +88,7 @@ class WebClient(object):
 
         auth = auth or self.auth
         if auth:
-            self.prcoess_auth_header(auth[0], auth[1])
+            self.handle_auth_header(auth[0], auth[1])
 
         if self.cookies:
             headers['Cookie'] = '; '.join(
