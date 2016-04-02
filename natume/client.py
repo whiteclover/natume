@@ -138,6 +138,7 @@ class WebClient(object):
             self.body = decompress(self.body)
 
     def handle_etag(self, path):
+        """Etags process"""
         if 'etag' in self.headers:
             self.etags[path] = self.headers['etag'][-1]
 
@@ -153,6 +154,7 @@ class WebClient(object):
                     del self.cookies[name]
 
     def clear_cookies(self):
+        """Clear cookies"""
         self.cookies = {}
 
     @property
@@ -187,12 +189,14 @@ class WebClient(object):
 
     @property
     def content_type(self):
+        """Get Content type"""
         value = self.get_header('content-type')
         c = value.split(';')
         return c[0]
 
     @property
     def charset(self):
+        """Get http chaset encoding"""
         value = self.get_header('content-type')
         c = value.split(';')
         if len(c) == 2:

@@ -21,6 +21,12 @@ import re
 
 
 class WebTestCase(TestCase):
+    """Web HTTP Test class
+
+    handle json data
+    handle http header
+
+    """
 
     BODY_RE = re.compile('/(.*)/([ims]+)?')
     FLAGS = {
@@ -33,38 +39,50 @@ class WebTestCase(TestCase):
         pass
 
     def assertHeader(self, key, value):
+        """Check a head line value"""
         self.assertEqual(self.client.get_header(key), value)
 
     def assertContentType(self, value):
+        """Check HTTP Response ContentType head"""
         self.assertEqual(self.client.content_type, value)
 
     def assertCharset(self, value):
+        """Check HTTP Response charset info"""
         self.assertEqual(self.client.charset, value)
 
     def assertStatus(self, value):
+        """Check HTTP Response Status code"""
         self.assertEqual(self.client.status, value)
 
     def assertCode(self, value):
+         """Check HTTP Response Status code"""
         self.assertEqual(self.client.status_code, int(value))
 
     def assertContent(self, op, value):
+         """Check HTTP Response Body"""
         self._assert_data(self.client.content, op, value)
 
     def assertJson(self, data, op, value):
+         """Check Json/Restful api data"""
         self._assert_data(data, op, value)
 
     def _assert_data(self, data, op, value):
+
         if op == ':':
+            # the key value equal assert
             self.assertEqual(data, value)
 
         elif op == '<-':
+            # the key value in assert
             self.assertIn(value, data)
 
         elif op == '=~':
+            # the key value regex match assert
             body_re = self._complie_body_re(value)
             self.assertTrue(body_re.search(data))
 
         elif op == '~~':
+            # the key value length assert
             self.assertEqual(len(data), value)
 
     def _complie_body_re(self, value):
