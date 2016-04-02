@@ -28,24 +28,12 @@ __all__ = [
     'WebClient',
     'WebTestCase',
     'DSLWebTestCase',
-    'Natume',
-    'console_run',
-    'get_cmd_options']
+    'Natume']
 
 
 import unittest
 import os
 import os.path
-
-
-def console_run():
-    options = get_cmd_options()
-    paths = options.test_dirs
-    url = options.url
-    debug = options.debug
-
-    smoke = Natume(url, paths, debug)
-    smoke.run()
 
 
 class Natume(object):
@@ -103,13 +91,4 @@ class Natume(object):
         dsl_parser.parse(path, filename)
         dsl_parser.complie()
         return dsl_parser.code, dsl_parser.class_name
-
-def get_cmd_options():
-    from argparse import ArgumentParser
-    parser = ArgumentParser(usage="natume [options]  test_dirs (or files)...")
-    parser.add_argument('-u', '--url', help='the url for test', default=None)
-    parser.add_argument("-d", "--debug", action='store_true', default=False, help="open debug mode (default %(default)r)")
-    parser.add_argument("test_dirs", default=[], nargs='*', help="the test dirs")
-    return parser.parse_args()
-
 

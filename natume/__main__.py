@@ -14,7 +14,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from natume import console_run
+from . import Natume
+
+
+def get_cmd_options():
+    from argparse import ArgumentParser
+    parser = ArgumentParser(usage="natume [options]  test_dirs (or files)...")
+    parser.add_argument('-u', '--url', help='the url for test', default=None)
+    parser.add_argument("-d", "--debug", action='store_true', default=False, help="open debug mode (default %(default)r)")
+    parser.add_argument("test_dirs", default=[], nargs='*', help="the test dirs")
+    return parser.parse_args()
+
+
+def console_run():
+    options = get_cmd_options()
+    paths = options.test_dirs
+    url = options.url
+    debug = options.debug
+
+    smoke = Natume(url, paths, debug)
+    smoke.run()
 
 
 

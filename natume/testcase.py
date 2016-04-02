@@ -55,15 +55,15 @@ class WebTestCase(TestCase):
         self.assertEqual(self.client.status, value)
 
     def assertCode(self, value):
-         """Check HTTP Response Status code"""
+        """Check HTTP Response Status code"""
         self.assertEqual(self.client.status_code, int(value))
 
     def assertContent(self, op, value):
-         """Check HTTP Response Body"""
+        """Check HTTP Response Body"""
         self._assert_data(self.client.content, op, value)
 
     def assertJson(self, data, op, value):
-         """Check Json/Restful api data"""
+        """Check Json/Restful api data"""
         self._assert_data(data, op, value)
 
     def _assert_data(self, data, op, value):

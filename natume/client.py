@@ -21,9 +21,9 @@ it can handle the http(s) request and return the response and other response pro
 
 import urllib2
 import base64
-from connection import HTTPConnection, HTTPSConnection, urlsplit, urljoin, urlencode
-from util import decompress
-from compat import SimpleCookie
+from natume.connection import HTTPConnection, HTTPSConnection, urlsplit, urljoin, urlencode
+from natume.util import decompress
+from natume.compat import SimpleCookie
 from json import loads
 
 class WebClient(object):
