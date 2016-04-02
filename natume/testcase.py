@@ -64,6 +64,9 @@ class WebTestCase(TestCase):
             body_re = self._complie_body_re(value)
             self.assertTrue(body_re.search(data))
 
+        elif op == '~~':
+            self.assertEqual(len(data), value)
+
     def _complie_body_re(self, value):
         m = self.BODY_RE.match(value)
         flag = None

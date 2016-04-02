@@ -390,7 +390,7 @@ class AssertCommand(BaseCommand):
             self._line(writer,'self.assert%s(%r)' % (assert_key, self.value), indent)
 
         elif assert_key == 'Json':
-            key, value = self.value.split('=')
+            key, value = self.value.split("=")
 
             key = key.strip()
             value = value.strip()
