@@ -65,7 +65,7 @@ class BaseParser(object):
 
     COMMAND_TOKEN = '>'
     SET_HEADER_TOKEN = '=>'
-    ASSERT_TOKENS = (':', '<-', '=~')
+    ASSERT_TOKENS = (':', '<-', '=~', '~~')
     SET_VAR_TOKEN = '='
     VAR_TOKEN = '@'
 
