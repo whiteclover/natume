@@ -12,10 +12,11 @@ setup(
     name = 'Natume',
     version = __version__,
     author = "Thomas Huang",
+    author_email='lyanghwy@gmail.com',
     description = "HTTP DSL Test Tool",
     license = "GPL 2",
     keywords = "http,test",
-    url='https://github.com/thomashuang/natume',
+    url='https://github.com/whiteclover/natume',
     long_description=open('README.rst').read(),
     packages = ['natume'],
     classifiers=[
