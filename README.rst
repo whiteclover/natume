@@ -187,6 +187,9 @@ When we  test the response is json data, we can use json key to assert::
 	json: ['data']['trackList'][0]['song_id'] =  '1772167572'
 	json: ['data']['type_id'] = 1
 
+ 	# date size
+	json ~~ ['data'] = 56
+
 
 
 DSLWebTestCase

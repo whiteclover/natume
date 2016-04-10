@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from compat import PY2
+from natume.compat import PY2
 
 
 if PY2:

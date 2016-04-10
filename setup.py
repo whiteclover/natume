@@ -1,6 +1,9 @@
 from setuptools import setup
 import sys
 
+
+readme = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+
 from natume import __version__
 
 
@@ -8,19 +11,20 @@ setup(
     name = 'Natume',
     version = __version__,
     author = "Thomas Huang",
-    description = "Web Blog Application",
+    description = "HTTP DSL Test Tool",
     license = "GPL 2",
-    keywords = "WSGI",
+    keywords = "http,test",
     url='https://github.com/thomashuang/natume',
     long_description=open('README.rst').read(),
     packages = ['natume'],
-    classifiers=(
-        "HTTP DSL SMOKER  TOOL",
-        "License :: MIT",
-        "Natural Language :: English",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
-        "Topic :: Internet :: HTTP Tester"
-        )
+    classifiers=[
+          'Development Status :: 5 - Production/Stable',
+          'Environment :: Web Environment',
+          'Intended Audience :: Developers',
+          'Programming Language :: Python',
+          'Programming Language :: Python :: 3',
+          "Programming Language :: Python :: Implementation :: CPython",
+          "Programming Language :: Python :: Implementation :: PyPy",
+          'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+      ],
     )

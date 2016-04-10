@@ -1,0 +1,9 @@
+# any kind of "*" pulls in __init__.pyc files,
+# so all extensions are explicit.
+
+recursive-include examples *.smoke
+recursive-include test *.py 
+
+include README* LICENSE distribute_setup.py ez_setup.py CHANGES*
+
+
