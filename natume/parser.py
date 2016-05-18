@@ -75,14 +75,12 @@ class BaseParser(object):
     ASSERT_REGEX = re.compile(r'([a-zA-Z0-9_]+)\s*(%s)\s*(.*)' % ('|'.join(ASSERT_TOKENS)))
     ASSIGN_REGEX = re.compile(r'%s([a-zA-Z_][a-zA-Z0-9_]+)\s*%s\s*(.*)' % (VAR_TOKEN, SET_VAR_TOKEN))
 
-
     def complie(self):
         self.scope.write(self.writer)
 
     @property
     def code(self):
         return self.writer.code
-
 
     def parse(self, *args, **kw):
         raise NotImplementedError('Must implement in subclass')
@@ -125,7 +123,7 @@ class BaseParser(object):
 
         m = self.ASSERT_REGEX.match(line)
         if m:
-            key, op,  value = m.group(1), m.group(2), m.group(3)
+            key, op, value = m.group(1), m.group(2), m.group(3)
             assert_command = AssertCommand(key, op, value, line, lineno)
             self.current_section.nodes[-1].asserts.append(assert_command)
             return
@@ -169,8 +167,8 @@ class DSLParser(BaseParser):
         parts = [_.capitalize() for _ in parts]
         return ''.join(parts) + 'Test'
 
-class DocDSLParser(BaseParser):
 
+class DocDSLParser(BaseParser):
 
     def __init__(self):
         self.current_section = None
@@ -179,7 +177,7 @@ class DocDSLParser(BaseParser):
         self.writer = Writer()
 
     def parse(self, string, lineno=0):
-        self.scope =  DocMethodsScpoe()
+        self.scope = DocMethodsScpoe()
         lines = string.split('\n')
         for line in lines:
             self.parse_line(line, lineno)
@@ -203,7 +201,6 @@ class CommandDslParser(BaseParser):
         for line in lines:
             self.parse_line(line, lineno)
             lineno += 1
-
 
     def parse_line(self, line, lineno):
         line = line.strip()
@@ -283,14 +280,15 @@ class ClassScope(BaseScope):
 
 class DocMethodsScpoe(BaseScope):
 
-   def write(self, writer, indent=0):
+    def write(self, writer, indent=0):
         indent = indent or self.indent
         for node in self.nodes:
             node.write(writer, indent)
 
+
 class CommandsScope(BaseScope):
 
-    def __init__(self,indent=0, node=None):
+    def __init__(self, indent=0, node=None):
         BaseScope.__init__(self, indent, node)
         self.var_nodes = []
 
@@ -302,6 +300,7 @@ class CommandsScope(BaseScope):
         if not self.nodes:
             writer.puts('pass', indent)
 
+
 class MethodScope(BaseScope):
 
     def __init__(self, name, indent=0, node=None):
@@ -310,7 +309,7 @@ class MethodScope(BaseScope):
         self.var_nodes = []
 
     def write(self, writer, indent=None):
-        indent =  indent or self.indent
+        indent = indent or self.indent
         writer.puts('')
         if self.name == 'initialize':
             writer.puts('def initialize(self):',  indent)
@@ -380,14 +379,14 @@ class AssertCommand(BaseCommand):
         self.op = op
         self.value = value
         self.line = line
-        self.lineno  = lineno
+        self.lineno = lineno
 
     def write(self, writer, indent=None):
         indent = indent if indent is not None else self.indent
         assert_key = self._key(self.key)
 
         if assert_key in ('Status', 'Code', 'ContentType', 'Charset'):
-            self._line(writer,'self.assert%s(%r)' % (assert_key, self.value), indent)
+            self._line(writer, 'self.assert%s(%r)' % (assert_key, self.value), indent)
 
         elif assert_key == 'Json':
             key, value = self.value.split("=")
@@ -396,11 +395,11 @@ class AssertCommand(BaseCommand):
             value = value.strip()
             writer.puts("json = self.client.json", indent)
             if key:
-                writer.puts("json = json%s" %(key), indent)
+                writer.puts("json = json%s" % (key), indent)
             self._line(writer, 'self.assertJson(json, %r, %s)' % (self.op, value), indent)
 
-        elif assert_key  == 'Content':
-            self._line(writer, 'self.assertContent(%r, %r)' %(self.op, self.value), indent)
+        elif assert_key == 'Content':
+            self._line(writer, 'self.assertContent(%r, %r)' % (self.op, self.value), indent)
 
         elif self.op == ':':
             if assert_key not in ('Content', 'Json'):

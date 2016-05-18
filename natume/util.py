@@ -14,8 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from compat import GzipFile, BytesIO
-
+from .compat import GzipFile, BytesIO, import_module_from_file
 
 
 def compress(data, compresslevel=9):
@@ -33,13 +32,14 @@ def decompress(data):
     """
     return GzipFile(fileobj=BytesIO(data), mode='rb').read()
 
+
 class lazy_attr(object):
 
     def __init__(self, wrapped):
         self.wrapped = wrapped
         try:
             self.__doc__ = wrapped.__doc__
-        except: # pragma: no cover
+        except:  # pragma: no cover
             pass
 
     def __get__(self, inst, objtype=None):

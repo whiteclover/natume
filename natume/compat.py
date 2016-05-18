@@ -39,3 +39,28 @@ if PY2 and PY_MINOR < 7:  # pragma: nocover
                  fileobj=None, mtime=None):
         return __saved_GzipFile__(filename, mode, compresslevel,
                                   fileobj)
+
+try:
+    # python 3.5+
+    import importlib.util
+
+    def import_module_from_file(name, path):
+
+        spec = importlib.util.spec_from_file_location(name, path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(foo)
+        return module
+
+except:
+    try:
+        # python 3.4...
+        from importlib.machinery import SourceFileLoader
+
+        def import_module_from_file(name, path):
+            return SourceFileLoader(name, path).load_module()
+    except:
+        # python 2.7
+        import imp
+
+    def import_module_from_file(name, path):
+        return imp.load_source(name, path)
