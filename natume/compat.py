@@ -62,5 +62,5 @@ except:
         # python 2.7
         import imp
 
-    def import_module_from_file(name, path):
-        return imp.load_source(name, path)
+        def import_module_from_file(name, path):
+            return imp.load_source(name, path)
