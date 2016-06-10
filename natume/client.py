@@ -26,6 +26,7 @@ from natume.util import decompress
 from natume.compat import SimpleCookie
 from json import loads
 
+
 class WebClient(object):
 
     DEFAULT_HEADERS = {
@@ -52,10 +53,8 @@ class WebClient(object):
         self.__json = None
 
         self.auth = auth
-        # todo: add ca handle
-        #self.ca = ca
 
-    def ajax(self, method, path, **kwargs):
+    def ajax(self, method, path, headers=None, **kwargs):
         """ GET HTTP AJAX request."""
         headers = headers or {}
         headers['X-Requested-With'] = 'XMLHttpRequest'
@@ -81,22 +80,23 @@ class WebClient(object):
         method = sc == 307 and self.method or 'GET'
         return self.do_request(method, path)
 
-    def do_request(self, method, path, payload=None, headers={}, auth=None):
+    def do_request(self, method, path, payload=None, headers=None, auth=None):
 
-        headers = self.default_headers.copy()
-        headers.update(headers)
+        request_header = self.default_headers.copy()
+        if headers:
+            request_header.update(headers)
 
         auth = auth or self.auth
         if auth:
             self.handle_auth_header(auth[0], auth[1])
 
         if self.cookies:
-            headers['Cookie'] = '; '.join(
+            request_header['Cookie'] = '; '.join(
                 '%s=%s' % cookie for cookie in self.cookies.items())
         path = urljoin(self.path, path)
 
         if path in self.etags:
-            headers['If-None-Match'] = self.etags[path]
+            request_header['If-None-Match'] = self.etags[path]
 
         body = ''
         if payload:
@@ -104,7 +104,7 @@ class WebClient(object):
                 path += '?' + urlencode(payload, doseq=True)
             else:
                 body = urlencode(payload, doseq=True)
-                headers['Content-Type'] = 'application/x-www-form-urlencoded'
+                request_header['Content-Type'] = 'application/x-www-form-urlencoded'
 
         self.status_code = 0
         self.body = None
@@ -113,7 +113,7 @@ class WebClient(object):
         self.__json = None
 
         self.connection.connect()
-        self.connection.request(method, path, body, headers)
+        self.connection.request(method, path, body, request_header)
         r = self.connection.getresponse()
         self.body = r.read()
         self.connection.close()
@@ -130,7 +130,7 @@ class WebClient(object):
 
     def handle_auth_header(self, username, password):
         auth_base64 = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
-        self.heades.add_header("Authorization", "Basic %s" % base64string)
+        self.headers["Authorization"] = "Basic %s" % (auth_base64)
 
     def handle_content_encoding(self):
         if 'content-encoding' in self.headers \
@@ -144,7 +144,7 @@ class WebClient(object):
 
     def handle_cookies(self):
         if 'set-cookie' in self.headers:
-            cookie_string  = self.headers['set-cookie']
+            cookie_string = self.headers['set-cookie']
             cookies = SimpleCookie(cookie_string)
             for name in cookies:
                 value = cookies[name].value
@@ -183,6 +183,7 @@ class WebClient(object):
         webbrowser.open(url)
 
     def get_header(self, key):
+        """Get header value"""
         key = key.replace('_', '-')
         if key in self.headers:
             return self.headers[key]
