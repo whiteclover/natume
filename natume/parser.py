@@ -141,6 +141,8 @@ class DSLParser(BaseParser):
         self.current_section = None
         self.current_command = None
         self.writer = Writer()
+        self.class_name = None
+        self.scope = None
 
     def parse(self, path, filename):
         filepath = os.path.join(path, filename)
@@ -175,9 +177,10 @@ class DocDSLParser(BaseParser):
         self.current_command = None
         self.methods = []
         self.writer = Writer()
+        self.scope = DocMethodsScpoe()
 
     def parse(self, string, lineno=0):
-        self.scope = DocMethodsScpoe()
+
         lines = string.split('\n')
         for line in lines:
             self.parse_line(line, lineno)
@@ -194,9 +197,10 @@ class CommandDslParser(BaseParser):
     def __init__(self):
         self.current_command = None
         self.writer = Writer()
+        self.current_section = CommandsScope()
 
     def parse(self, string, lineno=0):
-        self.current_section = CommandsScope()
+
         lines = string.split('\n')
         for line in lines:
             self.parse_line(line, lineno)
@@ -229,7 +233,7 @@ class CommandDslParser(BaseParser):
 
         m = self.ASSERT_REGEX.match(line)
         if m:
-            key, op,  value = m.group(1), m.group(2), m.group(3)
+            key, op, value = m.group(1), m.group(2), m.group(3)
             assert_command = AssertCommand(key, op, value, line, lineno)
             self.current_section.nodes[-1].asserts.append(assert_command)
             return
@@ -312,7 +316,7 @@ class MethodScope(BaseScope):
         indent = indent or self.indent
         writer.puts('')
         if self.name == 'initialize':
-            writer.puts('def initialize(self):',  indent)
+            writer.puts('def initialize(self):', indent)
             indent += 1
             for key, value in self.var_nodes:
                 writer.puts('%s=%s' % (key, value), indent)
@@ -330,13 +334,13 @@ class MethodScope(BaseScope):
 
 class CommandScope(BaseScope):
 
-    def __init__(self, method, path, data={}, indent=None, node=None):
+    def __init__(self, method, path, data=None, indent=None, node=None):
         BaseScope.__init__(self, indent, node)
         self.asserts = []
         self.headers = []
         self.sets = []
         self.path = path
-        self.data = data
+        self.data = data or {}
         self.method = method
 
     def write(self, writer, indent):

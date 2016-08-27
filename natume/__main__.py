@@ -36,6 +36,5 @@ def console_run():
     smoke.run()
 
 
-
 if __name__ == '__main__':
     console_run()

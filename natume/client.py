@@ -19,7 +19,6 @@
 it can handle the http(s) request and return the response and other response property access unities
 """
 
-import urllib2
 import base64
 from natume.connection import HTTPConnection, HTTPSConnection, urlsplit, urljoin, urlencode
 from natume.util import decompress

@@ -113,7 +113,7 @@ def gen_test_methods_from_class(doc):
     methods = {}
 
     for name in _methods:
-        methods[name] =  ns[name]
+        methods[name] = ns[name]
     return methods
 
 
@@ -122,7 +122,7 @@ class DSLWebTestCaseMeta(type):
     def __new__(metacls, cls_name, bases, attrs):
         doc = attrs.get('__doc__')
         if doc:
-            test_methods = CommandDslParsertest_methods = gen_test_methods_from_class(doc)
+            test_methods = gen_test_methods_from_class(doc)
             attrs.update(test_methods)
 
         cls = type.__new__(metacls, cls_name, bases, attrs)
@@ -140,5 +140,12 @@ class WebTestCaseMixin(WebTestCase):
 
 
 class DSLWebTestCase(with_metaclass(DSLWebTestCaseMeta, (WebTestCaseMixin,))):
-    pass
 
+    def setUP(self):
+        """Set up"""
+        self.client = self.get_client()
+        self.initialize()
+
+    def get_client(self):
+        """Create a http client in sub  test case"""
+        raise NotImplementedError("Must implement in subclsss")
